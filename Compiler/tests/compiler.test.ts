@@ -43,3 +43,20 @@ test('seven legal deliveries are rejected by cricket validation', () => {
   assert.match(result.errors[0]?.message ?? '', /after its sixth legal ball/i);
   assert.equal(result.errors[0]?.phase, 'Cricket Rule');
 });
+
+test('an incomplete final over compiles', () => {
+  const partialFinalOver = sampleMatch.replace('0 1 1 2 4 1', '0 1');
+  const result = compile(partialFinalOver);
+
+  assert.equal(result.success, true, result.errors.map((error) => error.message).join('\n'));
+  assert.equal(result.scorecard?.legalBalls, 14);
+});
+
+test('an incomplete over cannot be followed by another over', () => {
+  const incompleteEarlierOver = sampleMatch.replace('1 4 W . 6 wd 2', '1 4 .');
+  const result = compile(incompleteEarlierOver);
+
+  assert.equal(result.success, false);
+  assert.match(result.errors[0]?.message ?? '', /must contain 6 legal balls/i);
+  assert.equal(result.errors[0]?.phase, 'Cricket Rule');
+});

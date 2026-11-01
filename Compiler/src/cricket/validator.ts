@@ -30,7 +30,7 @@ export function validateMatch(ast:MatchNode):void {
   if(legal>6)fail(`OVER ${over.number} has ${legal} legal deliveries. An over cannot exceed 6 legal balls.`,over.line);
   const wicketsBefore=inn.overs.slice(0,index+1).flatMap(o=>o.deliveries).filter(d=>d.kind==='WICKET').length;
   const allOutAfterThisOver=wicketsBefore>=batting.playerCount-1;
-  if(legal!==6 && !allOutAfterThisOver)fail(`OVER ${over.number} has ${legal} legal deliveries. An over must contain 6 legal balls unless the innings ends all out.`,over.line);
+  if(legal!==6 && index!==inn.overs.length-1 && !allOutAfterThisOver)fail(`OVER ${over.number} has ${legal} legal deliveries. An over must contain 6 legal balls unless it is the final over or the innings ends all out.`,over.line);
   if(wicketsBefore>batting.playerCount-1)fail(`OVER ${over.number} records more than ${batting.playerCount-1} wickets.`,over.line);
  });
 }
