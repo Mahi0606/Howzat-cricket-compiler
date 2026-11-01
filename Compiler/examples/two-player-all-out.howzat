@@ -1,0 +1,24 @@
+MATCH "Two Player Practice" {
+  FORMAT CUSTOM
+  OVERS 2
+  MAX_OVERS_PER_BOWLER 2
+
+  TEAM Falcons {
+    PLAYERS 2
+    ROSTER { "Aarav" "Kabir" }
+  }
+
+  TEAM Strikers {
+    PLAYERS 2
+    ROSTER { "Dev" "Ishaan" }
+  }
+
+  INNINGS Falcons {
+    AGAINST Strikers
+    OPENERS "Aarav", "Kabir"
+    OVER 1 {
+      BOWLER "Dev"
+      1 W
+    }
+  }
+}

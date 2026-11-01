@@ -1,0 +1,47 @@
+export const sampleMatch = `MATCH "India vs Australia — Practice Match" {
+  FORMAT CUSTOM
+  OVERS 3
+  MAX_OVERS_PER_BOWLER 2
+
+  TEAM India {
+    PLAYERS 5
+    ROSTER {
+      "Rohit"
+      "Gill"
+      "Virat"
+      "Hardik"
+      "Jadeja"
+    }
+  }
+
+  TEAM Australia {
+    PLAYERS 5
+    ROSTER {
+      "Starc"
+      "Cummins"
+      "Maxwell"
+      "Head"
+      "Smith"
+    }
+  }
+
+  INNINGS India {
+    AGAINST Australia
+    OPENERS "Rohit", "Gill"
+
+    OVER 1 {
+      BOWLER "Starc"
+      1 4 W . 6 wd 2
+    }
+
+    OVER 2 {
+      BOWLER "Maxwell"
+      1 1 2 4 0 6
+    }
+
+    OVER 3 {
+      BOWLER "Starc"
+      0 1 1 2 4 1
+    }
+  }
+}`;

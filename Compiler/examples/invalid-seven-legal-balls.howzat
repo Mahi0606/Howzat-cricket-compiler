@@ -1,0 +1,16 @@
+// Intentionally invalid: seven legal deliveries in one over.
+MATCH "Invalid Over" {
+  FORMAT CUSTOM
+  OVERS 1
+  MAX_OVERS_PER_BOWLER 1
+  TEAM A { PLAYERS 2 ROSTER { "A1" "A2" } }
+  TEAM B { PLAYERS 2 ROSTER { "B1" "B2" } }
+  INNINGS A {
+    AGAINST B
+    OPENERS "A1", "A2"
+    OVER 1 {
+      BOWLER "B1"
+      1 2 3 4 5 6 1
+    }
+  }
+}
