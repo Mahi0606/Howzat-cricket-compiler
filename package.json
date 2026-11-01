@@ -1,0 +1,32 @@
+{
+  "name": "howzat-cricket-compiler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config Frontend/vite.config.ts",
+    "build": "vite build --config Frontend/vite.config.ts",
+    "compiler:typecheck": "tsc --project Compiler/tsconfig.json",
+    "frontend:typecheck": "tsc --project Frontend/tsconfig.json",
+    "typecheck": "npm run compiler:typecheck && npm run frontend:typecheck",
+    "test": "tsx --test Compiler/tests/*.test.ts"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
+  },
+  "overrides": {
+    "dompurify": "^3.4.17"
+  }
+}
