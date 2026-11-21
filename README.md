@@ -120,3 +120,13 @@ CSS; Tailwind and PostCSS are not used in this repository.
 - `npm run build`: create the production frontend in `Frontend/dist`.
 - `npm run typecheck`: check compiler and frontend TypeScript projects.
 - `npm test`: run compiler tests against valid and invalid existing examples.
+
+
+## Contributors & Acknowledgements
+
+- **Siddhartha Shukla**
+  - Compiler pipeline design and implementation (Lexer, Recursive-Descent Parser, AST, and Intermediate Representation).
+  - Cricket rule validation and match simulation engine (strike rotation, bowler restrictions, legal delivery tracking, and extras).
+  - Frontend compiler workbench (React, Monaco Editor syntax highlighting, interactive scorecard, and ball timeline).
+- **Mahendra Parihar** ([@Mahi0606](https://github.com/Mahi0606))
+  - Project architecture, repository design, and initial compiler scaffolding.
