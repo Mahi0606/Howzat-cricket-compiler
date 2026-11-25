@@ -122,11 +122,24 @@ CSS; Tailwind and PostCSS are not used in this repository.
 - `npm test`: run compiler tests against valid and invalid existing examples.
 
 
-## Contributors & Acknowledgements
+## Research Paper & Technical Report
 
+A detailed technical report formatted according to IEEE conference standards is available in this repository:
+- **Paper Title**: *HowzatLang: Design and Implementation of a Domain-Specific Language and Real-Time Interactive Compiler Studio for Cricket Match Simulation*
+- **PDF Document**: [`Howzat_Cricket_Compiler_IEEE_Report.pdf`](./Howzat_Cricket_Compiler_IEEE_Report.pdf)
+- **HTML Source**: [`report/ieee_report.html`](./report/ieee_report.html)
+
+## Contributors & Team Members
+
+- **Mahender Parihar** ([@Mahi0606](https://github.com/Mahi0606))
+  - Project architecture, repository design, and initial compiler scaffolding.
 - **Siddhartha Shukla**
   - Compiler pipeline design and implementation (Lexer, Recursive-Descent Parser, AST, and Intermediate Representation).
   - Cricket rule validation and match simulation engine (strike rotation, bowler restrictions, legal delivery tracking, and extras).
   - Frontend compiler workbench (React, Monaco Editor syntax highlighting, interactive scorecard, and ball timeline).
-- **Mahendra Parihar** ([@Mahi0606](https://github.com/Mahi0606))
-  - Project architecture, repository design, and initial compiler scaffolding.
+- **Aryan Jangde**
+  - Cricket match simulation engine, discrete delivery state machine, and batsman strike rotation dynamics.
+- **Sugat Athawale**
+  - Compiler regression test suite design, edge-case coverage (all-out scenarios, incomplete overs), and documentation.
+- **Sanskar Singh**
+  - Intermediate representation (IR) opcode design, JavaScript target code generation, and IDE compiler inspection panels.

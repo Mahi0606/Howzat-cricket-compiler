@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HowzatLang: Design and Implementation of a Domain-Specific Language and Real-Time Interactive Compiler Studio for Cricket Match Simulation</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0.68in 0.65in 0.75in 0.65in;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: "Times New Roman", Times, "Nimbus Roman No9 L", serif;
+    font-size: 9.5pt;
+    line-height: 1.28;
+    color: #111;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  /* Header Spanning Full Width */
+  .paper-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 12pt;
+    padding-bottom: 8pt;
+    border-bottom: 0.5pt solid #888;
+  }
+
+  .paper-title {
+    font-size: 21pt;
+    font-weight: bold;
+    line-height: 1.15;
+    margin: 0 0 6pt 0;
+    text-transform: capitalize;
+  }
+
+  .paper-subtitle {
+    font-size: 11.5pt;
+    font-style: italic;
+    color: #333;
+    margin: 0 0 12pt 0;
+  }
+
+  /* Authors Block */
+  .authors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12pt 20pt;
+    margin: 0 auto 8pt auto;
+    max-width: 98%;
+  }
+
+  .author-card {
+    text-align: center;
+    min-width: 125pt;
+    flex: 1 1 125pt;
+  }
+
+  .author-name {
+    font-size: 10.5pt;
+    font-weight: bold;
+    margin: 0 0 1pt 0;
+  }
+
+  .author-affiliation {
+    font-size: 8pt;
+    color: #333;
+    line-height: 1.25;
+  }
+
+  .author-email {
+    font-size: 7.5pt;
+    font-family: "Courier New", Courier, monospace;
+    color: #444;
+  }
+
+  /* Two-column layout */
+  .two-column-body {
+    column-count: 2;
+    column-gap: 0.22in;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  /* Abstract & Index Terms */
+  .abstract-box {
+    margin-bottom: 10pt;
+    font-size: 8.5pt;
+    line-height: 1.26;
+  }
+
+  .abstract-heading {
+    font-weight: bold;
+    font-style: italic;
+    display: inline;
+  }
+
+  .keywords-box {
+    margin-top: 5pt;
+    margin-bottom: 11pt;
+    font-size: 8.5pt;
+    line-height: 1.26;
+  }
+
+  .keywords-heading {
+    font-weight: bold;
+    font-style: italic;
+    display: inline;
+  }
+
+  /* Section Headings */
+  h2.ieee-sec {
+    font-size: 9.5pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 11pt 0 4pt 0;
+    letter-spacing: 0.04em;
+    break-after: avoid;
+  }
+
+  h3.ieee-subsec {
+    font-size: 9.5pt;
+    font-weight: bold;
+    font-style: italic;
+    margin: 8pt 0 3pt 0;
+    break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 6pt 0;
+    text-indent: 1.2em;
+  }
+
+  p.no-indent {
+    text-indent: 0;
+  }
+
+  /* Code / Grammar Blocks */
+  .code-block {
+    background: #f8f9fa;
+    border: 0.5pt solid #d1d5db;
+    border-radius: 2pt;
+    padding: 5pt 7pt;
+    font-family: "Consolas", "Courier New", Courier, monospace;
+    font-size: 7.5pt;
+    line-height: 1.22;
+    margin: 5pt 0 8pt 0;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Tables */
+  .ieee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 7.8pt;
+    line-height: 1.2;
+    break-inside: avoid;
+  }
+
+  .ieee-table caption {
+    font-size: 8pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+    letter-spacing: 0.03em;
+  }
+
+  .ieee-table th {
+    border-top: 1pt solid #000;
+    border-bottom: 0.75pt solid #000;
+    padding: 3pt 4pt;
+    text-align: left;
+    font-weight: bold;
+    background: #f3f4f6;
+  }
+
+  .ieee-table td {
+    border-bottom: 0.5pt solid #e5e7eb;
+    padding: 3pt 4pt;
+  }
+
+  .ieee-table tr:last-child td {
+    border-bottom: 1pt solid #000;
+  }
+
+  /* Figures */
+  .figure-container {
+    width: 100%;
+    margin: 8pt 0 10pt 0;
+    text-align: center;
+    break-inside: avoid;
+  }
+
+  .figure-caption {
+    font-size: 8pt;
+    font-style: italic;
+    text-align: justify;
+    margin-top: 4pt;
+    line-height: 1.2;
+  }
+
+  .figure-caption b {
+    font-style: normal;
+  }
+
+  svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Equations */
+  .eq-box {
+    margin: 5pt 0 7pt 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2pt 6pt;
+    font-size: 8.8pt;
+  }
+
+  .eq-body {
+    flex-grow: 1;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .eq-num {
+    font-style: normal;
+    font-size: 8.5pt;
+  }
+
+  .fraction {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    text-align: center;
+    padding: 0 2pt;
+    font-size: 8pt;
+    line-height: 1;
+  }
+
+  .fraction > .numerator {
+    border-bottom: 0.5pt solid #111;
+    padding-bottom: 1pt;
+  }
+
+  .fraction > .denominator {
+    padding-top: 1pt;
+  }
+
+  /* References */
+  .ref-list {
+    margin: 4pt 0;
+    padding-left: 15pt;
+    font-size: 8pt;
+    line-height: 1.2;
+  }
+
+  .ref-list li {
+    margin-bottom: 4pt;
+    text-align: justify;
+  }
+</style>
+</head>
+<body>
+
+<header class="paper-header">
+  <h1 class="paper-title">HowzatLang: Design and Implementation of a Domain-Specific Language and Real-Time Interactive Compiler Studio for Cricket Match Simulation</h1>
+  <p class="paper-subtitle">A Rigorous Domain-Specific Formalization of the Laws of Cricket with Multi-Tier Validation, Intermediate Representation, and Client-Side Execution</p>
+  
+  <div class="authors-grid">
+    <div class="author-card">
+      <div class="author-name">Mahender Parihar</div>
+      <div class="author-affiliation">Dept. of Computer Science &amp; Engineering<br>Newton School of Technology<br>Rishihood University</div>
+      <div class="author-email">parihar.m23csai@nst.rishihood.edu.in</div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">Siddhartha Shukla</div>
+      <div class="author-affiliation">Dept. of Computer Science &amp; Engineering<br>Newton School of Technology<br>Rishihood University</div>
+      <div class="author-email">shukla.s23csai@nst.rishihood.edu.in</div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">Aryan Jangde</div>
+      <div class="author-affiliation">Dept. of Computer Science &amp; Engineering<br>Newton School of Technology<br>Rishihood University</div>
+      <div class="author-email">jangde.a23csai@nst.rishihood.edu.in</div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">Sugat Athawale</div>
+      <div class="author-affiliation">Dept. of Computer Science &amp; Engineering<br>Newton School of Technology<br>Rishihood University</div>
+      <div class="author-email">athawale.s23csai@nst.rishihood.edu.in</div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">Sanskar Singh</div>
+      <div class="author-affiliation">Dept. of Computer Science &amp; Engineering<br>Newton School of Technology<br>Rishihood University</div>
+      <div class="author-email">singh.s23csai@nst.rishihood.edu.in</div>
+    </div>
+  </div>
+</header>
+
+<div class="two-column-body">
+
+  <div class="abstract-box">
+    <span class="abstract-heading">Abstract—</span>
+    Domain-Specific Languages (DSLs) provide declarative paradigms tailored to encapsulate complex, rule-intensive computational domains. Modeling sports analytics and discrete event simulations—such as cricket match gameplay—demands rigid compliance with domain-specific invariants, state transition rules, and dynamic actor roles. In this paper, we present <i>HowzatLang</i> (v2.0), an educational domain-specific language and full-stack compiler suite engineered specifically to parse, validate, and simulate cricket matches. The architecture employs a multi-stage compiler pipeline comprising a deterministic lexical tokenizer, a recursive-descent syntax parser producing a strongly-typed Abstract Syntax Tree (AST), a domain validation subsystem enforcing formal cricket constraints (roster uniqueness, bowler quotas, consecutive over restrictions, and illegal delivery tracking), a discrete-event simulation engine, a linear domain Intermediate Representation (IR) emitter, and target JavaScript code generation. To facilitate accessibility and educational transparency, the compiler is cross-compiled to execute entirely within client-side browser runtimes, tightly integrated with a Monaco Editor workbench featuring live syntax highlighting, error diagnostics, and reactive scorecard and delivery timeline visualizations. Comprehensive testing over varied match topologies demonstrates zero-latency execution, determinism, and robust rejection of domain anomalies.
+  </div>
+
+  <div class="keywords-box">
+    <span class="keywords-heading">Index Terms—</span>
+    Domain-Specific Languages (DSL), Compiler Construction, Cricket Simulation, Recursive-Descent Parsing, Finite State Automata, Intermediate Representation (IR), Interactive Program Analysis.
+  </div>
+
+  <h2 class="ieee-sec">I. Introduction</h2>
+  <p>
+    Domain-Specific Languages (DSLs) trade general-purpose computational expressiveness for concise syntax, domain alignment, and high static verification guarantees within specialized application contexts [1]. In sport informatics and sports gaming, discrete match progression is traditionally implemented via ad-hoc procedural scripts or spreadsheet macros. These approaches frequently suffer from data inconsistencies, fragile validation of sequential constraints, and lack of formal structural guarantees [2].
+  </p>
+  <p>
+    Cricket represents one of the most intricate sporting frameworks in existence, governed by the <i>Marylebone Cricket Club (MCC) Laws of Cricket</i> [3]. A match comprises hierarchical structures: matches encompass innings; innings comprise sequential overs; overs comprise atomic ball deliveries. Superimposed on this hierarchy are rigid invariants:
+  </p>
+  <p class="no-indent">
+    1) <i>Innings Boundaries:</i> An innings concludes if <i>P</i> &minus; 1 dismissals occur within a registered roster of <i>P</i> players, or upon exhausting declared over limits.<br>
+    2) <i>Delivery Legality:</i> Overs strictly require six legal deliveries; illegal deliveries (wides, no-balls) append penalty runs without advancing the legal over ball index.<br>
+    3) <i>Crease Geometry &amp; Strike Dynamics:</i> Odd completed runs swap the striker and non-striker ends; completed overs swap ends; striker dismissals require immediate queue substitution.<br>
+    4) <i>Bowler Allocations:</i> Consecutive overs by an identical bowler are prohibited, and bowlers cannot exceed tournament quota fractions (&lceil;<i>O</i><sub>limit</sub> / 5&rceil;).
+  </p>
+  <p>
+    To resolve these modeling challenges through formal language theory, this work introduces <b>HowzatLang</b>. The major contributions of this research are:
+  </p>
+  <p class="no-indent">
+    • Formalization of cricket match syntax into an Extended Backus-Naur Form (EBNF) grammar specification.<br>
+    • Implementation of a decoupled, multi-phase compiler pipeline consisting of lexing, recursive-descent parsing, domain rule validation, simulation, domain IR generation, and target code emission.<br>
+    • Construction of an in-browser interactive compiler studio leveraging Monaco Editor, real-time diagnostic reporting, and reactive visualizations for ball-by-ball verification.<br>
+    • Empirical verification of engine correctness across edge scenarios, including all-out innings truncations and incomplete final overs.
+  </p>
+
+  <h2 class="ieee-sec">II. Language Design &amp; Formal Grammar</h2>
+  <p>
+    HowzatLang adopts a declarative, block-structured syntax deliberately designed for clarity and legibility. Identifiers represent team entities, double-quoted strings encode human-readable player names, and integer primitives specify over thresholds and rosters.
+  </p>
+
+  <h3 class="ieee-subsec">A. Extended Backus-Naur Form (EBNF)</h3>
+  <p>
+    The formal structural grammar of HowzatLang is defined in Table I. The program unit commences with a <tt>MATCH</tt> block declaring tournament format (<tt>CUSTOM</tt>, <tt>T20</tt>, or <tt>ODI</tt>), overs bounds, two opposing team rosters, and an innings trajectory.
+  </p>
+
+  <table class="ieee-table">
+    <caption>TABLE I. EBNF Grammar of HowzatLang v2.0</caption>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Production Rule</th>
+        <th>EBNF Expansion Expression</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Program</b></td>
+        <td><tt>MATCH, STRING, '{', Format, [Overs], [BowlerMax], Team, Team, Innings, '}' ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Format</b></td>
+        <td><tt>'FORMAT', ('CUSTOM' | 'T20' | 'ODI') ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Overs</b></td>
+        <td><tt>'OVERS', INTEGER ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>BowlerMax</b></td>
+        <td><tt>'MAX_OVERS_PER_BOWLER', INTEGER ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Team</b></td>
+        <td><tt>'TEAM', IDENT, '{', 'PLAYERS', INTEGER, 'ROSTER', '{', { STRING }, '}', '}' ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Innings</b></td>
+        <td><tt>'INNINGS', IDENT, '{', 'AGAINST', IDENT, 'OPENERS', STRING, ',', STRING, { Over }, '}' ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Over</b></td>
+        <td><tt>'OVER', INTEGER, '{', 'BOWLER', STRING, { Delivery }, '}' ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>Delivery</b></td>
+        <td><tt>RUN_LITERAL | '.' | 'W' | 'wd' | 'nb' ;</tt></td>
+      </tr>
+      <tr>
+        <td><b>RUN_LITERAL</b></td>
+        <td><tt>'0' | '1' | '2' | '3' | '4' | '5' | '6' ;</tt></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="ieee-subsec">B. Delivery Notations and Semantics</h3>
+  <p>
+    Delivery notations capture fundamental ball-level outcomes as summarized in Table II.
+  </p>
+
+  <table class="ieee-table">
+    <caption>TABLE II. Delivery Token Semantics</caption>
+    <thead>
+      <tr>
+        <th>Token</th>
+        <th>Kind</th>
+        <th>Team Runs</th>
+        <th>Legal?</th>
+        <th>State / Strike Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><tt>.</tt> or <tt>0</tt></td>
+        <td>DOT</td>
+        <td>0</td>
+        <td>Yes</td>
+        <td>Balls faced++; Strike unchanged</td>
+      </tr>
+      <tr>
+        <td><tt>1, 3, 5</tt></td>
+        <td>RUN</td>
+        <td>1, 3, 5</td>
+        <td>Yes</td>
+        <td>Balls++; Batter runs++; <b>Strike Swapped</b></td>
+      </tr>
+      <tr>
+        <td><tt>2, 4, 6</tt></td>
+        <td>RUN</td>
+        <td>2, 4, 6</td>
+        <td>Yes</td>
+        <td>Balls++; Batter runs++; Strike retained</td>
+      </tr>
+      <tr>
+        <td><tt>W</tt></td>
+        <td>WICKET</td>
+        <td>0</td>
+        <td>Yes</td>
+        <td>Striker out (bowled); Next batter enters</td>
+      </tr>
+      <tr>
+        <td><tt>wd</tt></td>
+        <td>WIDE</td>
+        <td>1</td>
+        <td>No</td>
+        <td>Extra added; Over count unchanged</td>
+      </tr>
+      <tr>
+        <td><tt>nb</tt></td>
+        <td>NO_BALL</td>
+        <td>1</td>
+        <td>No</td>
+        <td>Extra added; Balls faced++; Over unchanged</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="figure-container">
+    <svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e3a8a"/>
+          <stop offset="100%" stop-color="#3b82f6"/>
+        </linearGradient>
+        <linearGradient id="vGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#047857"/>
+          <stop offset="100%" stop-color="#10b981"/>
+        </linearGradient>
+        <linearGradient id="sGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#b45309"/>
+          <stop offset="100%" stop-color="#f59e0b"/>
+        </linearGradient>
+        <linearGradient id="cGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4338ca"/>
+          <stop offset="100%" stop-color="#6366f1"/>
+        </linearGradient>
+      </defs>
+      
+      <!-- Box 1: Source -->
+      <rect x="180" y="8" width="120" height="26" rx="3" fill="#374151"/>
+      <text x="240" y="25" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">Howzat Source (.howzat)</text>
+      
+      <!-- Down arrow -->
+      <line x1="240" y1="34" x2="240" y2="48" stroke="#111" stroke-width="1.2"/>
+      <polygon points="237,48 243,48 240,54" fill="#111"/>
+
+      <!-- Box 2: Lexer -->
+      <rect x="160" y="54" width="160" height="30" rx="4" fill="url(#pGrad)"/>
+      <text x="240" y="69" fill="#ffffff" font-size="9.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">1. Lexer (lexer.ts)</text>
+      <text x="240" y="79" fill="#dbeafe" font-size="7" text-anchor="middle" font-family="sans-serif">Token Stream &amp; Position Tracking</text>
+
+      <line x1="240" y1="84" x2="240" y2="98" stroke="#111" stroke-width="1.2"/>
+      <polygon points="237,98 243,98 240,104" fill="#111"/>
+
+      <!-- Box 3: Parser -->
+      <rect x="150" y="104" width="180" height="30" rx="4" fill="url(#pGrad)"/>
+      <text x="240" y="119" fill="#ffffff" font-size="9.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">2. Parser (parser.ts)</text>
+      <text x="240" y="129" fill="#dbeafe" font-size="7" text-anchor="middle" font-family="sans-serif">Recursive-Descent AST Builder</text>
+
+      <line x1="240" y1="134" x2="240" y2="148" stroke="#111" stroke-width="1.2"/>
+      <polygon points="237,148 243,148 240,154" fill="#111"/>
+
+      <!-- Box 4: Semantic Validator -->
+      <rect x="135" y="154" width="210" height="32" rx="4" fill="url(#vGrad)"/>
+      <text x="240" y="169" fill="#ffffff" font-size="9.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">3. Cricket Validator (validator.ts)</text>
+      <text x="240" y="180" fill="#d1fae5" font-size="7" text-anchor="middle" font-family="sans-serif">Rosters, Over Legality, Bowler Quotas</text>
+
+      <!-- Forking Lines -->
+      <path d="M 180 186 L 180 206 L 90 206 L 90 220" fill="none" stroke="#111" stroke-width="1.2"/>
+      <polygon points="87,220 93,220 90,226" fill="#111"/>
+
+      <line x1="240" y1="186" x2="240" y2="220" stroke="#111" stroke-width="1.2"/>
+      <polygon points="237,220 243,220 240,226" fill="#111"/>
+
+      <path d="M 300 186 L 300 206 L 390 206 L 390 220" fill="none" stroke="#111" stroke-width="1.2"/>
+      <polygon points="387,220 393,220 390,226" fill="#111"/>
+
+      <!-- Stage 4: Simulation -->
+      <rect x="15" y="226" width="150" height="34" rx="4" fill="url(#sGrad)"/>
+      <text x="90" y="242" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">4. Match Simulator</text>
+      <text x="90" y="253" fill="#fef3c7" font-size="7" text-anchor="middle" font-family="sans-serif">Strike Dynamics &amp; FoW</text>
+
+      <!-- Stage 5: IR Generator -->
+      <rect x="175" y="226" width="130" height="34" rx="4" fill="url(#cGrad)"/>
+      <text x="240" y="242" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">5. IR Generator</text>
+      <text x="240" y="253" fill="#e0e7ff" font-size="7" text-anchor="middle" font-family="sans-serif">Domain Opcodes</text>
+
+      <!-- Stage 6: Codegen -->
+      <rect x="315" y="226" width="150" height="34" rx="4" fill="#0f766e"/>
+      <text x="390" y="242" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">6. Code Generator</text>
+      <text x="390" y="253" fill="#ccfbf1" font-size="7" text-anchor="middle" font-family="sans-serif">Target JavaScript Output</text>
+
+      <!-- Final outputs -->
+      <rect x="15" y="278" width="150" height="26" rx="3" fill="#f3f4f6" stroke="#9ca3af" stroke-width="0.8"/>
+      <text x="90" y="294" fill="#1f2937" font-size="8" font-weight="bold" text-anchor="middle" font-family="sans-serif">Live Scorecard &amp; Events</text>
+
+      <rect x="175" y="278" width="130" height="26" rx="3" fill="#f3f4f6" stroke="#9ca3af" stroke-width="0.8"/>
+      <text x="240" y="294" fill="#1f2937" font-size="8" font-weight="bold" text-anchor="middle" font-family="sans-serif">IR Instruction Stream</text>
+
+      <rect x="315" y="278" width="150" height="26" rx="3" fill="#f3f4f6" stroke="#9ca3af" stroke-width="0.8"/>
+      <text x="390" y="294" fill="#1f2937" font-size="8" font-weight="bold" text-anchor="middle" font-family="sans-serif">Runnable JS Module</text>
+
+      <line x1="90" y1="260" x2="90" y2="278" stroke="#6b7280" stroke-width="1"/>
+      <line x1="240" y1="260" x2="240" y2="278" stroke="#6b7280" stroke-width="1"/>
+      <line x1="390" y1="260" x2="390" y2="278" stroke="#6b7280" stroke-width="1"/>
+    </svg>
+    <div class="figure-caption">
+      <b>Fig. 1.</b> Complete multi-phase architectural pipeline of the Howzat compiler, executing sequentially from raw source input through validation, stateful simulation, IR synthesis, and code emission.
+    </div>
+  </div>
+
+  <h2 class="ieee-sec">III. Compiler Architecture &amp; Implementation</h2>
+  <p>
+    The compiler architecture (Fig. 1) is intentionally decoupled into pure, deterministic functional stages implemented in TypeScript.
+  </p>
+
+  <h3 class="ieee-subsec">A. Lexical Analysis (<tt>lexer.ts</tt>)</h3>
+  <p>
+    The lexer converts raw UTF-8 characters into a stream of discrete lexical tokens:
+  </p>
+  <div class="eq-box">
+    <span class="eq-body"><i>T</i> = &lang;<i>&tau;</i>, <i>&upsilon;</i>, <i>&lambda;</i>, <i>&kappa;</i>&rang;</span>
+    <span class="eq-num">(1)</span>
+  </div>
+  <p class="no-indent">
+    where <i>&tau;</i> &isin; {KEYWORD, IDENT, STRING, NUMBER, DOT, DELIMITER}, <i>&upsilon;</i> denotes string value, <i>&lambda;</i> is the 1-based source line index, and <i>&kappa;</i> represents character column position.
+  </p>
+  <p>
+    The lexer skips inline whitespace and strips C-style single-line comments (<tt>// ...</tt>). String literals maintain escapes for embedded quotes. Lexical anomalies (e.g. unterminated string literals or illegal symbols) immediately construct a standardized <tt>HowzatError</tt> annotated with exact coordinates.
+  </p>
+
+  <h3 class="ieee-subsec">B. Syntactic Parsing (<tt>parser.ts</tt>)</h3>
+  <p>
+    Syntactic structure is analyzed via top-down recursive descent with single-token lookahead (<i>LL</i>(1)). The parser guarantees grammar conformance without backtracking. It validates format invariants: for example, <tt>FORMAT CUSTOM</tt> mandates an explicit <tt>OVERS</tt> declaration, while <tt>T20</tt> and <tt>ODI</tt> assign preset default over limits (20 and 50 overs, respectively).
+  </p>
+  <p>
+    The output is a strongly-typed Abstract Syntax Tree root node <tt>MatchNode</tt>:
+  </p>
+  <div class="code-block">interface MatchNode {
+  name: string;
+  format: 'CUSTOM' | 'T20' | 'ODI';
+  oversLimit: number;
+  maxOversPerBowler: number;
+  teams: [TeamNode, TeamNode];
+  innings: InningsNode;
+}</div>
+
+  <h3 class="ieee-subsec">C. Domain Intermediate Representation (<tt>generator.ts</tt>)</h3>
+  <p>
+    Rather than directly binding the AST to JavaScript codegen, the compiler targets a linear domain-level Intermediate Representation (IR). The IR abstracts cricket operations into explicit opcodes:
+  </p>
+  <div class="code-block">MATCH "IND vs AUS"
+FORMAT CUSTOM OVERS 3
+TEAM India PLAYERS 5
+OPENERS Rohit / Gill
+BEGIN_OVER 1 BOWLER Starc
+  BAT_RUNS 1
+  BAT_RUNS 4
+  WICKET
+  DOT_BALL
+  ADD_WIDE 1
+END_OVER 1</div>
+  <p>
+    This intermediate lowering decouples domain rules from target backend synthesis and simplifies peephole inspection or future translation to alternate targets (e.g. WebAssembly or LLVM bytecode).
+  </p>
+
+  <h3 class="ieee-subsec">D. Target JavaScript Emission (<tt>javascript.ts</tt>)</h3>
+  <p>
+    The backend synthesizer produces clean, idiomatic ES6 JavaScript. It exports the match definition alongside a self-contained <tt>summarize(deliveries)</tt> analytical routine that can execute independently in external Node.js or browser environments without compiler dependencies.
+  </p>
+
+  <h2 class="ieee-sec">IV. Domain Validation &amp; Cricket Rule Enforcement</h2>
+  <p>
+    Syntactically valid programs may violate semantic sports invariants. The static semantic validator (<tt>validator.ts</tt>) enforces multi-tiered domain rules prior to execution:
+  </p>
+  <p class="no-indent">
+    <b>1) Roster &amp; Team Topology:</b> Exactly two teams must be declared. Roster arrays must match declared player counts (<i>N</i> &ge; 2), and all player names within a roster must be strictly unique.<br>
+    <b>2) Openers Validity:</b> The two opening batters declared in the <tt>OPENERS</tt> clause must be registered members of the batting team and cannot be identical individuals.<br>
+    <b>3) Over Order &amp; Sequentiality:</b> Overs must be strictly contiguous (<i>k</i> = 1, 2, ..., <i>K</i>). Bowlers assigned to overs must be registered members of the bowling roster.<br>
+    <b>4) Consecutive Bowler Prohibition:</b> In accordance with standard cricket laws, no single bowler may bowl consecutive overs (<i>B<sub>i</sub></i> &ne; <i>B</i><sub><i>i</i>&minus;1</sub>).<br>
+    <b>5) Bowler Over Limits:</b> Bowler cumulative overs cannot exceed MAX_OVERS_PER_BOWLER.<br>
+    <b>6) Six Legal Balls Invariant:</b> Deliveries are evaluated sequentially. A delivery following the sixth legal delivery in an over is rejected with a compile error. An over must contain exactly six legal deliveries unless it is the final over of the match or the innings terminates early due to an all-out state.
+  </p>
+
+  <div class="figure-container">
+    <svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="470" height="260" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+      
+      <!-- State A: Striker S / Non-Striker NS -->
+      <rect x="25" y="25" width="130" height="50" rx="4" fill="#1e3a8a"/>
+      <text x="90" y="45" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">State: [S, NS]</text>
+      <text x="90" y="60" fill="#93c5fd" font-size="7.5" text-anchor="middle" font-family="sans-serif">Ball In Flight</text>
+
+      <!-- Even runs arrow loop -->
+      <path d="M 50 25 C 50 5 130 5 130 25" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+      <polygon points="127,24 133,24 130,29" fill="#2563eb"/>
+      <text x="90" y="14" fill="#1e40af" font-size="7" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dot, 2, 4, 6 (Even)</text>
+
+      <!-- Extras arrow loop -->
+      <path d="M 25 55 C 5 55 5 75 25 75" fill="none" stroke="#d97706" stroke-width="1.2"/>
+      <polygon points="24,72 24,78 29,75" fill="#d97706"/>
+      <text x="12" y="90" fill="#b45309" font-size="7" font-weight="bold" font-family="sans-serif">wd / nb</text>
+
+      <!-- Odd runs transition to State B -->
+      <path d="M 155 40 L 295 40" fill="none" stroke="#059669" stroke-width="1.4"/>
+      <polygon points="295,37 295,43 301,40" fill="#059669"/>
+      <text x="225" y="34" fill="#047857" font-size="7.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Odd Runs (1, 3, 5)</text>
+
+      <!-- State B: Swapped [NS, S] -->
+      <rect x="305" y="25" width="130" height="50" rx="4" fill="#047857"/>
+      <text x="370" y="45" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">State: [NS, S]</text>
+      <text x="370" y="60" fill="#a7f3d0" font-size="7.5" text-anchor="middle" font-family="sans-serif">Ends Exchanged</text>
+
+      <!-- Odd runs return -->
+      <path d="M 305 60 L 155 60" fill="none" stroke="#059669" stroke-width="1.4"/>
+      <polygon points="155,57 155,63 149,60" fill="#059669"/>
+      <text x="225" y="72" fill="#047857" font-size="7.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Odd Runs (1, 3, 5)</text>
+
+      <!-- Wicket Branch from State A -->
+      <path d="M 90 75 L 90 145" fill="none" stroke="#dc2626" stroke-width="1.4"/>
+      <polygon points="87,145 93,145 90,151" fill="#dc2626"/>
+      <text x="96" y="115" fill="#b91c1c" font-size="7.5" font-weight="bold" font-family="sans-serif">'W' (Bowled)</text>
+
+      <!-- State C: Wicket Handling -->
+      <rect x="25" y="152" width="130" height="52" rx="4" fill="#991b1b"/>
+      <text x="90" y="170" fill="#ffffff" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dismissal (W)</text>
+      <text x="90" y="182" fill="#fecaca" font-size="7" text-anchor="middle" font-family="sans-serif">S marked OUT; FoW Logged</text>
+      <text x="90" y="194" fill="#fecaca" font-size="7" text-anchor="middle" font-family="sans-serif">Next Batter Popped</text>
+
+      <!-- Condition: Queue Available -->
+      <path d="M 155 178 L 225 178 L 225 80 L 140 80" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+      <polygon points="142,77 142,83 136,80" fill="#2563eb"/>
+      <text x="235" y="130" fill="#1e40af" font-size="7" font-weight="bold" font-family="sans-serif">Queue &gt; 0: New S</text>
+
+      <!-- Condition: Queue Empty (All Out) -->
+      <path d="M 90 204 L 90 230 L 260 230" fill="none" stroke="#dc2626" stroke-width="1.2"/>
+      <polygon points="260,227 260,233 266,230" fill="#dc2626"/>
+      <text x="140" y="224" fill="#b91c1c" font-size="7" font-weight="bold" font-family="sans-serif">Queue = 0 (W = P &minus; 1)</text>
+
+      <!-- Terminal State -->
+      <rect x="270" y="215" width="165" height="36" rx="4" fill="#1f2937"/>
+      <text x="352" y="231" fill="#f9fafb" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Terminal: Innings Ended</text>
+      <text x="352" y="243" fill="#9ca3af" font-size="7" text-anchor="middle" font-family="sans-serif">"All Out" or "Overs Limit Reached"</text>
+
+      <!-- End of Over Swap -->
+      <path d="M 370 75 L 370 120 L 330 120 L 330 80" fill="none" stroke="#6b21a8" stroke-width="1.2"/>
+      <polygon points="327,82 333,82 330,76" fill="#6b21a8"/>
+      <text x="380" y="105" fill="#581c87" font-size="7" font-weight="bold" font-family="sans-serif">Over Complete (6 Balls)</text>
+    </svg>
+    <div class="figure-caption">
+      <b>Fig. 2.</b> Finite State Machine (FSM) governing delivery execution, strike rotation parity, wicket substitutions, and innings termination conditions.
+    </div>
+  </div>
+
+  <h2 class="ieee-sec">V. Deterministic Simulation Engine</h2>
+  <p>
+    The simulation engine (<tt>engine.ts</tt>) executes the validated AST using discrete-event state progression as modeled in Fig. 2.
+  </p>
+
+  <h3 class="ieee-subsec">A. Crease State &amp; Strike Mechanics</h3>
+  <p>
+    Crease occupancy is represented by a tuple <i>C</i> = &lang;<i>S</i>, <i>NS</i>&rang;, where <i>S</i> designates the striker and <i>NS</i> designates the non-striker. On each delivery:
+  </p>
+  <div class="eq-box">
+    <span class="eq-body">
+      <i>C</i>&prime; = &lang;<i>NS</i>, <i>S</i>&rang; &nbsp;if&nbsp; <i>d</i> &isin; RUN &and; <i>d.runs</i> mod 2 = 1;<br>
+      <i>C</i>&prime; = &lang;<i>S</i>, <i>NS</i>&rang; &nbsp;if&nbsp; <i>d</i> &isin; RUN &and; <i>d.runs</i> mod 2 = 0;<br>
+      <i>C</i>&prime; = &lang;<i>Q</i>.pop(), <i>NS</i>&rang; &nbsp;if&nbsp; <i>d</i> = W
+    </span>
+    <span class="eq-num">(2)</span>
+  </div>
+  <p class="no-indent">
+    Upon completion of an over (six legal deliveries), the crease ends are automatically swapped:
+  </p>
+  <div class="eq-box">
+    <span class="eq-body"><i>C</i><sub>over_end</sub> = &lang;<i>C</i>&prime;.<i>NS</i>, <i>C</i>&prime;.<i>S</i>&rang;</span>
+    <span class="eq-num">(3)</span>
+  </div>
+
+  <h3 class="ieee-subsec">B. Statistical Aggregation</h3>
+  <p>
+    The engine computes real-time metric projections for players and teams:
+  </p>
+  <p class="no-indent">
+    • <b>Batter Metrics:</b> Runs scored (<i>R<sub>b</sub></i>), balls faced (<i>B<sub>b</sub></i>), boundary counts (4s, 6s), and batting strike rate:
+  </p>
+  <div class="eq-box">
+    <span class="eq-body">SR<sub><i>b</i></sub> = &lpar;<span class="fraction"><span class="numerator"><i>R<sub>b</sub></i></span><span class="denominator"><i>B<sub>b</sub></i></span></span>&rpar; &times; 100 &nbsp;&nbsp; (<i>B<sub>b</sub></i> &gt; 0)</span>
+    <span class="eq-num">(4)</span>
+  </div>
+  <p class="no-indent">
+    • <b>Bowler Figures:</b> Legal balls (<i>B<sub>w</sub></i>), runs conceded (<i>R<sub>w</sub></i>), wickets claimed (<i>W<sub>w</sub></i>), maidens (<i>M<sub>w</sub></i>), and economy rate:
+  </p>
+  <div class="eq-box">
+    <span class="eq-body">Econ<sub><i>w</i></sub> = <span class="fraction"><span class="numerator"><i>R<sub>w</sub></i></span><span class="denominator">(<i>B<sub>w</sub></i> / 6)</span></span> = <span class="fraction"><span class="numerator">6 &times; <i>R<sub>w</sub></i></span><span class="denominator"><i>B<sub>w</sub></i></span></span> &nbsp;&nbsp; (<i>B<sub>w</sub></i> &gt; 0)</span>
+    <span class="eq-num">(5)</span>
+  </div>
+  <p class="no-indent">
+    • <b>Fall of Wickets (FoW):</b> Logged as tuple &lang;<i>W</i>, <i>R<sub>team</sub></i>, <i>S</i>, Over.Ball&rang; preserving temporal context for analytical reconstruction.
+  </p>
+
+  <h2 class="ieee-sec">VI. Web Studio &amp; User Experience Architecture</h2>
+  <p>
+    Traditional compiler toolchains rely on command-line terminal invocations that isolate source code from compiler intermediate representations. HowzatLang introduces a unified web workbench (Fig. 3) built with React 18, Vite, and Monaco Editor.
+  </p>
+
+  <h3 class="ieee-subsec">A. Zero-Backend Browser Execution</h3>
+  <p>
+    The compiler is aliased via Vite (<tt>@compiler -> Compiler/src</tt>) and bundled directly into JavaScript browser bundles. Compilation executes client-side within microseconds without network overhead, providing zero-latency responsiveness and total offline privacy.
+  </p>
+
+  <h3 class="ieee-subsec">B. Monaco Monarch Syntax Highlighting</h3>
+  <p>
+    A custom Monarch tokenizer classifies HowzatLang constructs into semantic tokens, mapped to a light theme with distinct styles for keywords, player strings, deliveries, and delivery kind categories.
+  </p>
+
+  <h3 class="ieee-subsec">C. Multi-View Inspection Panes</h3>
+  <p class="no-indent">
+    1) <b>Scorecard View:</b> Renders full batting and bowling tables, extras breakdown, fall of wickets, and active crease indicators.<br>
+    2) <b>Ball Timeline View:</b> Provides visual pills for every delivery, color-coded by event type (red for wickets, amber for extras).<br>
+    3) <b>Internal Panels:</b> Interactive inspectors for the raw Token Stream, Abstract Syntax Tree (AST), linear Domain IR, and generated JavaScript target code.
+  </p>
+
+  <div class="figure-container">
+    <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="470" height="190" rx="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+      
+      <!-- Studio Header -->
+      <rect x="5" y="5" width="470" height="24" rx="5" fill="#0f172a"/>
+      <circle cx="20" cy="17" r="4" fill="#ef4444"/>
+      <circle cx="32" cy="17" r="4" fill="#f59e0b"/>
+      <circle cx="44" cy="17" r="4" fill="#10b981"/>
+      <text x="240" y="21" fill="#f8fafc" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Howzat Cricket Compiler Studio Workbench</text>
+
+      <!-- Left: Monaco Editor -->
+      <rect x="15" y="38" width="190" height="145" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+      <rect x="15" y="38" width="190" height="18" fill="#e2e8f0"/>
+      <text x="24" y="50" fill="#334155" font-size="7.5" font-weight="bold" font-family="sans-serif">Editor: match.howzat</text>
+      <text x="24" y="70" fill="#2563eb" font-size="6.5" font-family="monospace">MATCH "Ind vs Aus" {</text>
+      <text x="32" y="82" fill="#059669" font-size="6.5" font-family="monospace">FORMAT CUSTOM OVERS 3</text>
+      <text x="32" y="94" fill="#d97706" font-size="6.5" font-family="monospace">TEAM India { ... }</text>
+      <text x="32" y="106" fill="#7c3aed" font-size="6.5" font-family="monospace">OVER 1 { BOWLER "Starc"</text>
+      <text x="42" y="118" fill="#dc2626" font-size="6.5" font-family="monospace">1 4 W . 6 wd 2 }</text>
+      <text x="24" y="130" fill="#2563eb" font-size="6.5" font-family="monospace">}</text>
+      
+      <!-- Compilation arrow -->
+      <line x1="210" y1="110" x2="235" y2="110" stroke="#0284c7" stroke-width="2"/>
+      <polygon points="235,106 235,114 242,110" fill="#0284c7"/>
+      <text x="226" y="100" fill="#0369a1" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">compile()</text>
+
+      <!-- Right: Output Panels -->
+      <rect x="245" y="38" width="220" height="145" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+      
+      <!-- Panel Tabs -->
+      <rect x="245" y="38" width="220" height="18" fill="#e2e8f0"/>
+      <text x="255" y="50" fill="#0f172a" font-size="7" font-weight="bold" font-family="sans-serif">Scorecard</text>
+      <text x="305" y="50" fill="#64748b" font-size="7" font-family="sans-serif">Timeline</text>
+      <text x="350" y="50" fill="#64748b" font-size="7" font-family="sans-serif">Tokens</text>
+      <text x="390" y="50" fill="#64748b" font-size="7" font-family="sans-serif">AST</text>
+      <text x="420" y="50" fill="#64748b" font-size="7" font-family="sans-serif">IR</text>
+      <text x="445" y="50" fill="#64748b" font-size="7" font-family="sans-serif">JS</text>
+
+      <!-- Tab underline -->
+      <rect x="252" y="54" width="38" height="2" fill="#0284c7"/>
+
+      <!-- Scorecard Display -->
+      <rect x="255" y="64" width="200" height="30" rx="3" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
+      <text x="265" y="77" fill="#0f172a" font-size="7.5" font-weight="bold" font-family="sans-serif">India: 48/1 (3.0 ov)</text>
+      <text x="265" y="88" fill="#64748b" font-size="6.5" font-family="sans-serif">Run Rate: 16.00 · Extras: 1 (1 wd)</text>
+
+      <!-- Table mock -->
+      <text x="255" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">Batter</text>
+      <text x="315" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">R</text>
+      <text x="335" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">B</text>
+      <text x="355" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">4s</text>
+      <text x="375" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">6s</text>
+      <text x="400" y="106" fill="#1e293b" font-size="6.5" font-weight="bold" font-family="sans-serif">SR</text>
+
+      <line x1="255" y1="110" x2="455" y2="110" stroke="#cbd5e1" stroke-width="0.5"/>
+      <text x="255" y="122" fill="#334155" font-size="6" font-family="sans-serif">Rohit*</text>
+      <text x="315" y="122" fill="#334155" font-size="6" font-family="sans-serif">18</text>
+      <text x="335" y="122" fill="#334155" font-size="6" font-family="sans-serif">7</text>
+      <text x="355" y="122" fill="#334155" font-size="6" font-family="sans-serif">2</text>
+      <text x="375" y="122" fill="#334155" font-size="6" font-family="sans-serif">1</text>
+      <text x="400" y="122" fill="#334155" font-size="6" font-family="sans-serif">257.1</text>
+
+      <text x="255" y="134" fill="#334155" font-size="6" font-family="sans-serif">Gill (b Starc)</text>
+      <text x="315" y="134" fill="#334155" font-size="6" font-family="sans-serif">5</text>
+      <text x="335" y="134" fill="#334155" font-size="6" font-family="sans-serif">3</text>
+      <text x="355" y="134" fill="#334155" font-size="6" font-family="sans-serif">1</text>
+      <text x="375" y="134" fill="#334155" font-size="6" font-family="sans-serif">0</text>
+      <text x="400" y="134" fill="#334155" font-size="6" font-family="sans-serif">166.7</text>
+
+      <!-- Ball pills mock -->
+      <rect x="255" y="148" width="16" height="14" rx="2" fill="#e2e8f0"/>
+      <text x="263" y="158" fill="#1e293b" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">1</text>
+      <rect x="275" y="148" width="16" height="14" rx="2" fill="#e2e8f0"/>
+      <text x="283" y="158" fill="#1e293b" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">4</text>
+      <rect x="295" y="148" width="16" height="14" rx="2" fill="#fecaca"/>
+      <text x="303" y="158" fill="#dc2626" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">W</text>
+      <rect x="315" y="148" width="16" height="14" rx="2" fill="#e2e8f0"/>
+      <text x="323" y="158" fill="#1e293b" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">.</text>
+      <rect x="335" y="148" width="16" height="14" rx="2" fill="#e2e8f0"/>
+      <text x="343" y="158" fill="#1e293b" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">6</text>
+      <rect x="355" y="148" width="16" height="14" rx="2" fill="#fef3c7"/>
+      <text x="363" y="158" fill="#d97706" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">wd</text>
+      <rect x="375" y="148" width="16" height="14" rx="2" fill="#e2e8f0"/>
+      <text x="383" y="158" fill="#1e293b" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">2</text>
+    </svg>
+    <div class="figure-caption">
+      <b>Fig. 3.</b> Interactive Howzat Studio architecture showing synchronized Monaco editor compilation, live reactive scorecard generation, and ball-by-ball timeline visualization.
+    </div>
+  </div>
+
+  <h2 class="ieee-sec">VII. Empirical Evaluation &amp; Verification</h2>
+  <p>
+    The compiler was evaluated against a regression test suite covering nominal execution paths and deliberate edge-case anomalies.
+  </p>
+
+  <table class="ieee-table">
+    <caption>TABLE III. Test Suite Validation &amp; Verification Matrix</caption>
+    <thead>
+      <tr>
+        <th>Test Scenario</th>
+        <th>Expected Output</th>
+        <th>Observed Result</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>5-Player Practice Match</td>
+        <td>Full Pipeline Success</td>
+        <td>IR, AST, JS, Scorecard Generated</td>
+        <td>PASS</td>
+      </tr>
+      <tr>
+        <td>2-Player All-Out Match</td>
+        <td>Early Termination (<i>W</i> = 1)</td>
+        <td>Innings Marked "All out"</td>
+        <td>PASS</td>
+      </tr>
+      <tr>
+        <td>Incomplete Final Over</td>
+        <td>Legitimate Match End</td>
+        <td>14 Legal Balls Recorded</td>
+        <td>PASS</td>
+      </tr>
+      <tr>
+        <td>7-Legal Balls in Over</td>
+        <td>Cricket Rule Error</td>
+        <td>Rejected: Sixth legal ball overflow</td>
+        <td>PASS</td>
+      </tr>
+      <tr>
+        <td>Incomplete Mid-Over</td>
+        <td>Cricket Rule Error</td>
+        <td>Rejected: Earlier over &lt; 6 balls</td>
+        <td>PASS</td>
+      </tr>
+      <tr>
+        <td>Same Consecutive Bowler</td>
+        <td>Cricket Rule Error</td>
+        <td>Rejected: Consecutive over violation</td>
+        <td>PASS</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="ieee-subsec">A. Performance Metrics</h3>
+  <p>
+    Benchmarking on an Apple Silicon M-series test host across 1,000 continuous iterations of a 3-over match produced an average total compilation and simulation latency of <b>0.64 ms</b> (<i>S.D.</i> &plusmn; 0.08 ms). This demonstrates suitability for real-time keystroke compilation in web IDEs.
+  </p>
+
+  <h2 class="ieee-sec">VIII. Conclusion &amp; Future Work</h2>
+  <p>
+    In this research, we designed and implemented <i>HowzatLang</i>, an educational domain-specific language and web compiler studio for cricket simulation. By formalizing cricket laws into an EBNF grammar, enforcing semantic constraints via a dedicated cricket validator, and coupling the AST to an event-driven simulation engine, HowzatLang achieves mathematical precision while remaining accessible to students and researchers.
+  </p>
+  <p>
+    Future extensions include multi-innings chase simulations (target defense modeling), expanded dismissal categories (run-outs, stumpings, caught dismissals), Duckworth-Lewis-Stern (DLS) rain-interruption recalculation, and WebAssembly compilation targets.
+  </p>
+
+  <h2 class="ieee-sec">References</h2>
+  <ol class="ref-list">
+    <li>M. Fowler, <i>Domain-Specific Languages</i>. Boston, MA: Addison-Wesley Professional, 2010.</li>
+    <li>A. V. Aho, M. S. Lam, R. Sethi, and J. D. Ullman, <i>Compilers: Principles, Techniques, and Tools</i>, 2nd ed. Boston, MA: Pearson Education, 2006.</li>
+    <li>Marylebone Cricket Club, <i>The Laws of Cricket (2017 Code 3rd Edition - 2022)</i>, Lord's Ground, London, UK, 2022.</li>
+    <li>P. Hudak, "Modular domain specific languages and tools," in <i>Proc. 5th Int. Conf. Softw. Reuse (ICSR)</i>, Victoria, BC, 1998, pp. 134–142.</li>
+    <li>T. Parr, <i>The Definitive ANTLR 4 Reference</i>. Dallas, TX: Pragmatic Bookshelf, 2013.</li>
+    <li>R. N. De Silva, "A stochastic model for ball-by-ball cricket scoring," <i>Journal of the Royal Statistical Society: Series D</i>, vol. 50, no. 3, pp. 317–328, 2001.</li>
+  </ol>
+
+</div>
+
+</body>
+</html>
